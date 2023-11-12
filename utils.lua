@@ -8,7 +8,7 @@ function get_peripheral_fn(name)
     
             local type = peripheral.getType(side)
             print("type: "..type)
-            if string.find(type, name) then
+            if type == name then
                return peripheral.wrap(side)
             end
     
@@ -62,7 +62,7 @@ function select_item_fn(item_name)
 		
 		if item_info ~= nil then
 	
-			if string.find(item_info.name, item_name) then
+			if item_info.name == item_name then
 				turtle.select(i)
 				
 				return true
