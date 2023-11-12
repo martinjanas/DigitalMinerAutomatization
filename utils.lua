@@ -112,6 +112,7 @@ function place_blocks_fn(Blocks, GlobalManager)
 	
 	if GlobalManager.m_bIsChunkyTurtle then
 	   turtle.turnLeft()
+    end
 
 	if select_item_fn(Blocks.BLOCK_CHATBOX) then
 		GlobalManager.m_bHasChatBox = true
