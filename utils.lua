@@ -1,4 +1,3 @@
--- test
 function is_chunky_turtle_fn()
         local list = peripheral.getNames()
     
