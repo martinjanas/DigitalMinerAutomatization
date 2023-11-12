@@ -159,3 +159,10 @@ function destroy_blocks_fn(GlobalManager)
 	turtle.down()
 	turtle.down()
 end
+
+function percentage_in_range_fn(percentage, percentage_target, tolerance)
+    local lower_bound = percentage_target - tolerance
+    local upper_bound = percentage_target + tolerance
+
+    return percentage >= lower_bound and percentage <= upper_bound
+end
