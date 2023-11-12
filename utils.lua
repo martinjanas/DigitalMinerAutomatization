@@ -1,4 +1,4 @@
-function get_peripheral_fn(name)
+function get_peripheral_wrap_fn(name)
     local list = peripheral.getNames()
     
         for _, side in pairs(list) do
@@ -7,7 +7,7 @@ function get_peripheral_fn(name)
             end
     
             local type = peripheral.getType(side)
-            print("type: "..type)
+            
             if type == name then
                return peripheral.wrap(side)
             end
@@ -122,11 +122,11 @@ function place_blocks_fn(Blocks, GlobalManager)
 		turtle.placeUp()
 	end
 	
-	GlobalManager.m_pChatBox = get_peripheral_fn("chatBox") --chatBox
-	
-    os.sleep(0.15)
+    os.sleep(0.3)
 
-	GlobalManager.m_pMiner = get_peripheral_fn("digitalMiner") --digitalMiner
+	GlobalManager.m_pChatBox = peripheral.wrap("chatBox") --get_peripheral_fn("chatBox") --chatBox
+	
+	GlobalManager.m_pMiner = peripheral.wrap("digitalMiner") --get_peripheral_fn("digitalMiner") --digitalMiner
 
     if GlobalManager.m_pMiner then
        GlobalManager.m_pMiner.start()
