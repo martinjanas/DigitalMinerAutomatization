@@ -7,7 +7,7 @@ function get_peripheral_fn(name)
             end
     
             local type = peripheral.getType(side)
-    
+            print("type: "..type)
             if string.find(type, name) then
                return peripheral.wrap(side)
             end
