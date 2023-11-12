@@ -8,11 +8,11 @@ function get_peripheral_fn(name)
     
             local type = peripheral.getType(side)
     
-            if not string.find(type, name) then
-                return nil
+            if string.find(type, name) then
+               return peripheral.wrap(side)
             end
     
-            return peripheral.wrap(side)
+            return nil
         end
     
         return nil
