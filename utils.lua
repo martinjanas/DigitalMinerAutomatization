@@ -11,8 +11,6 @@ function get_peripheral_wrap_fn(name)
             if type == name then
                return peripheral.wrap(side)
             end
-    
-            return nil
         end
     
         return nil
