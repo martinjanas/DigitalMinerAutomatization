@@ -125,6 +125,8 @@ function place_blocks_fn(Blocks, GlobalManager)
 		turtle.placeUp()
 	end
 	
+    os.sleep(0.5)
+
 	GlobalManager.m_pChatBox = get_peripheral_fn("chatBox") --chatBox
 	
 	GlobalManager.m_pMiner = get_peripheral_fn("digitalMiner") --digitalMiner
