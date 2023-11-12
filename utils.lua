@@ -71,7 +71,7 @@ function select_item_fn(item_name)
 	return false
 end
 
-function place_blocks_fn(Blocks, GlobalManager)
+function place_blocks_fn(Blocks, GlobalVars)
 	select_item_fn(Blocks.BLOCK_MINER)
 	
 	turtle.placeUp()
@@ -95,8 +95,8 @@ function place_blocks_fn(Blocks, GlobalManager)
 	turtle.placeUp()
 	turtle.forward()
 	
-	if not GlobalManager.m_bIsChunkyTurtle and select_item_fn(Blocks.BLOCK_CHUNKLOADER) then
-		GlobalManager.m_bHasChunkLoader = true
+	if not GlobalVars.m_bIsChunkyTurtle and select_item_fn(Blocks.BLOCK_CHUNKLOADER) then
+		GlobalVars.m_bHasChunkLoader = true
 		
 		select_item_fn(Blocks.BLOCK_CHUNKLOADER)
 		
@@ -108,12 +108,12 @@ function place_blocks_fn(Blocks, GlobalManager)
 	turtle.forward()
 	turtle.forward()
 	
-	if GlobalManager.m_bIsChunkyTurtle then
+	if GlobalVars.m_bIsChunkyTurtle then
 	   turtle.turnLeft()
     end
 
 	if select_item_fn(Blocks.BLOCK_CHATBOX) then
-		GlobalManager.m_bHasChatBox = true
+		GlobalVars.m_bHasChatBox = true
 	
 		select_item_fn(Blocks.BLOCK_CHATBOX)
 		
@@ -122,20 +122,20 @@ function place_blocks_fn(Blocks, GlobalManager)
 	
     os.sleep(0.3)
 
-	GlobalManager.m_pChatBox = get_peripheral_wrap_fn("chatBox") --chatBox
-	GlobalManager.m_pMiner = get_peripheral_wrap_fn("digitalMiner") --digitalMiner
+	GlobalVars.m_pChatBox = get_peripheral_wrap_fn("chatBox") --chatBox
+	GlobalVars.m_pMiner = get_peripheral_wrap_fn("digitalMiner") --digitalMiner
 
-    if GlobalManager.m_pMiner then
-       GlobalManager.m_pMiner.start()
+    if GlobalVars.m_pMiner then
+        GlobalVars.m_pMiner.start()
     end
 end
 
-function destroy_blocks_fn(GlobalManager)
-	if GlobalManager.m_bHasChatBox then
+function destroy_blocks_fn(GlobalVars)
+	if GlobalVars.m_bHasChatBox then
 		turtle.digUp()
 	end
 
-	if not GlobalManager.m_bIsChunkyTurtle then
+	if not GlobalVars.m_bIsChunkyTurtle then
 		turtle.turnLeft()
 	end
 	
@@ -151,7 +151,7 @@ function destroy_blocks_fn(GlobalManager)
 	turtle.turnLeft()
 	turtle.dig()
 	
-	if not GlobalManager.m_bIsChunkyTurtle and GlobalManager.m_bHasChunkLoader then
+	if not GlobalVars.m_bIsChunkyTurtle and GlobalVars.m_bHasChunkLoader then
 		turtle.forward()
 		turtle.dig()
 	end
