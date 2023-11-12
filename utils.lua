@@ -124,6 +124,8 @@ function place_blocks_fn(Blocks, GlobalManager)
 	
 	GlobalManager.m_pChatBox = get_peripheral_fn("chatBox") --chatBox
 	
+    os.sleep(0.15)
+
 	GlobalManager.m_pMiner = get_peripheral_fn("digitalMiner") --digitalMiner
 
     if GlobalManager.m_pMiner then
