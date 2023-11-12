@@ -110,12 +110,8 @@ function place_blocks_fn(Blocks, GlobalManager)
 	turtle.forward()
 	turtle.forward()
 	
-	--if IS_CHUNKY_TURTLE then
-	--	turtle.turnLeft()
-	--	SIDE = "front"
-	--else 
-	--	SIDE = "left"
-	--end
+	if GlobalManager.m_bIsChunkyTurtle then
+	   turtle.turnLeft()
 
 	if select_item_fn(Blocks.BLOCK_CHATBOX) then
 		GlobalManager.m_bHasChatBox = true
@@ -125,8 +121,6 @@ function place_blocks_fn(Blocks, GlobalManager)
 		turtle.placeUp()
 	end
 	
-    os.sleep(0.5)
-
 	GlobalManager.m_pChatBox = get_peripheral_fn("chatBox") --chatBox
 	
 	GlobalManager.m_pMiner = get_peripheral_fn("digitalMiner") --digitalMiner
