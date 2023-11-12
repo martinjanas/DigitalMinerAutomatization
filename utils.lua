@@ -132,7 +132,7 @@ function place_blocks_fn(Blocks, GlobalManager)
     end
 end
 
-function destroy_blocks(GlobalManager)
+function destroy_blocks_fn(GlobalManager)
 	if GlobalManager.m_bHasChatBox then
 		turtle.digUp()
 	end
