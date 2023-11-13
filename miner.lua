@@ -34,18 +34,18 @@ GlobalVars.m_bIsChunkyTurtle = false
 GlobalVars.m_bHasChatBox = false
 
 function download_file(url, destination)
-    local response = http.get(url)
+   local response = http.get(url)
 
-    if response then
-        local file = fs.open(destination, "w")
+   if response then
+      local file = fs.open(destination, "w")
 
-        local data = response.readAll()
+      local data = response.readAll()
 
-        file.write(data)
-        file.close()
+      file.write(data)
+      file.close()
 
-        response.close()
-    end
+      response.close()
+   end
 end
 
 download_file("https://raw.githubusercontent.com/martinjanas/DigitalMinerAutomatization/main/utils.lua", "utils.lua")
@@ -53,76 +53,78 @@ download_file("https://raw.githubusercontent.com/martinjanas/DigitalMinerAutomat
 require "utils"
 
 function main(i)
-    GlobalVars.m_bIsChunkyTurtle = is_chunky_turtle_fn()
+   GlobalVars.m_bIsChunkyTurtle = utils_is_chunky_turtle()
 
-    place_blocks_fn(Blocks, GlobalVars)
+   utils_place_blocks(Blocks, GlobalVars)
 
-    os.sleep(0.15)
+   os.sleep(0.15)
 
-    if GlobalVars.m_pMiner then
-       local to_mine_cached = GlobalVars.m_pMiner.getToMine()
+   if GlobalVars.m_pMiner then
+      GlobalVars.m_pMiner.start()
 
-       while GlobalVars.m_pMiner.isRunning() do
-            local to_mine = GlobalVars.m_pMiner.getToMine()
+      local to_mine_cached = GlobalVars.m_pMiner.getToMine()
 
-            local seconds = (to_mine * 0.5)
+      while GlobalVars.m_pMiner.isRunning() do
+         local to_mine = GlobalVars.m_pMiner.getToMine()
+
+         local seconds = (to_mine * 0.5)
             
+         if GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
+            local percentage = (to_mine / to_mine_cached) * 100
+            percentage = math.floor(percentage)
+
+            if utils_percentage_in_range(percentage, 80, 1) then
+               local text = string.format("20%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
+               GlobalVars.m_pChatBox.sendMessage(text, "Miner")
+               os.sleep(2)
+            end
+
+            if utils_percentage_in_range(percentage, 50, 1) then
+               local text = string.format("50%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
+               GlobalVars.m_pChatBox.sendMessage(text, "Miner")
+               os.sleep(2)
+            end
+
+            if utils_percentage_in_range(percentage, 30, 1) then
+               local text = string.format("70%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
+               GlobalVars.m_pChatBox.sendMessage(text, "Miner")
+               os.sleep(2)
+            end
+         end
+
+         if to_mine % 5 then
+            local text = string.format("To mine: %d, ETA: %s", to_mine, utils_get_time(seconds))
+		      print(text)
+         end
+
+         if (to_mine == 0) then
             if GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
-               local percentage = (to_mine / to_mine_cached) * 100
-               percentage = math.floor(percentage)
-
-               if percentage_in_range_fn(percentage, 80, 1) then
-                  local text = string.format("20%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
-                  GlobalVars.m_pChatBox.sendMessage(text, "Miner")
-                  os.sleep(2)
-               end
-
-               if percentage_in_range_fn(percentage, 50, 1) then
-                  local text = string.format("50%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
-                  GlobalVars.m_pChatBox.sendMessage(text, "Miner")
-                  os.sleep(2)
-               end
-
-               if percentage_in_range_fn(percentage, 30, 1) then
-                  local text = string.format("70%% of Blocks Mined (%d/%d)", to_mine, to_mine_cached)
-                  GlobalVars.m_pChatBox.sendMessage(text, "Miner")
-                  os.sleep(2)
-               end
+               local text = string.format("Done (%d/%d) rounds", i, Settings.MAX_CHUNKS)
+               GlobalVars.m_pChatBox.sendMessage(text, "Miner")
+               os.sleep(1)
             end
-
-            if to_mine % 5 then
-               local text = string.format("To mine: %d, ETA: %s", to_mine, get_time_fn(seconds))
-		       print(text)
-            end
-
-            if (to_mine == 0) then
-                if GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
-                   local text = string.format("Done (%d/%d) rounds", i, Settings.MAX_CHUNKS)
-                   GlobalVars.m_pChatBox.sendMessage(text, "Miner")
-                   os.sleep(1)
-                end
                 
-                if i == Settings.MAX_CHUNKS and GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
-                    local text = string.format("Pick me up! I am finished!")
-                    GlobalVars.m_pChatBox.sendMessage(text, "Miner")
-                    os.sleep(1)
-                end
-
-                destroy_blocks_fn(GlobalVars)
-
-                os.sleep(2)
-
-                go_one_chunk_fn()
+            if i == Settings.MAX_CHUNKS and GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
+               local text = string.format("Pick me up! I am finished!")
+               GlobalVars.m_pChatBox.sendMessage(text, "Miner")
+               os.sleep(1)
             end
 
-            os.sleep(0.5)
-       end
-    end
+            utils_destroy_blocks(GlobalVars)
+
+            os.sleep(2)
+
+            utils_go_one_chunk()
+         end
+
+         os.sleep(0.5)
+      end
+   end
 end
 
 for i = 1, Settings.MAX_CHUNKS do
-    GlobalVars.m_bIsChunkyTurtle = false
-    GlobalVars.m_bHasChunkLoader = false
+   GlobalVars.m_bIsChunkyTurtle = false
+   GlobalVars.m_bHasChunkLoader = false
     
-    main(i)
+   main(i)
 end

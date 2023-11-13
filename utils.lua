@@ -1,4 +1,4 @@
-function get_peripheral_wrap_fn(name)
+function utils_get_peripheral_wrap(name)
     local list = peripheral.getNames()
     
         for _, side in pairs(list) do
@@ -16,7 +16,7 @@ function get_peripheral_wrap_fn(name)
         return nil
 end
 
-function is_chunky_turtle_fn()
+function utils_is_chunky_turtle()
         local list = peripheral.getNames()
     
         for _, side in pairs(list) do
@@ -26,17 +26,15 @@ function is_chunky_turtle_fn()
     
             local type = peripheral.getType(side)
     
-            if not string.find(type, "chunky") then
-                return false
+            if string.find(type, "chunky") then
+                return true
             end
-    
-            return true
         end
     
         return false
     end
 
-function get_time_fn(seconds)
+function utils_get_time(seconds)
     local hours = math.floor(seconds / 3600)
     local minutes = math.floor((seconds % 3600) / 60)
     local remaining_seconds = seconds % 60
@@ -44,7 +42,7 @@ function get_time_fn(seconds)
     return string.format("%02d:%02d:%02d", hours, minutes, remaining_seconds)
 end
 
-function go_one_chunk_fn()
+function utils_go_one_chunk()
 	turtle.turnLeft()
 	turtle.turnLeft()
 	turtle.turnLeft()
@@ -54,7 +52,7 @@ function go_one_chunk_fn()
 	end
 end
 
-function select_item_fn(item_name)
+function utils_select_item(item_name)
 	for i = 1, 16 do
 		local item_info = turtle.getItemDetail(i)
 		
@@ -71,8 +69,8 @@ function select_item_fn(item_name)
 	return false
 end
 
-function place_blocks_fn(Blocks, GlobalVars)
-	select_item_fn(Blocks.BLOCK_MINER)
+function utils_place_blocks(Blocks, GlobalVars)
+	utils_select_item(Blocks.BLOCK_MINER)
 	
 	turtle.placeUp()
 	turtle.turnRight()
@@ -80,7 +78,7 @@ function place_blocks_fn(Blocks, GlobalVars)
 	turtle.forward()
 	turtle.turnLeft()
 	
-	select_item_fn(Blocks.BLOCK_ENERGY)
+	utils_select_item(Blocks.BLOCK_ENERGY)
 	
 	turtle.placeUp()
 	turtle.forward()
@@ -90,15 +88,15 @@ function place_blocks_fn(Blocks, GlobalVars)
 	turtle.forward()
 	turtle.up()
 	
-	select_item_fn(Blocks.BLOCK_STORAGE)
+	utils_select_item(Blocks.BLOCK_STORAGE)
 	
 	turtle.placeUp()
 	turtle.forward()
 	
-	if not GlobalVars.m_bIsChunkyTurtle and select_item_fn(Blocks.BLOCK_CHUNKLOADER) then
+	if not GlobalVars.m_bIsChunkyTurtle and utils_select_item(Blocks.BLOCK_CHUNKLOADER) then
 		GlobalVars.m_bHasChunkLoader = true
 		
-		select_item_fn(Blocks.BLOCK_CHUNKLOADER)
+		utils_select_item(Blocks.BLOCK_CHUNKLOADER)
 		
 		turtle.placeUp()
 	end
@@ -112,25 +110,25 @@ function place_blocks_fn(Blocks, GlobalVars)
 	   turtle.turnLeft()
     end
 
-	if select_item_fn(Blocks.BLOCK_CHATBOX) then
+	if utils_select_item(Blocks.BLOCK_CHATBOX) then
 		GlobalVars.m_bHasChatBox = true
 	
-		select_item_fn(Blocks.BLOCK_CHATBOX)
+		utils_select_item(Blocks.BLOCK_CHATBOX)
 		
 		turtle.placeUp()
 	end
 	
     os.sleep(0.3)
 
-	GlobalVars.m_pChatBox = get_peripheral_wrap_fn("chatBox") --chatBox
-	GlobalVars.m_pMiner = get_peripheral_wrap_fn("digitalMiner") --digitalMiner
+	GlobalVars.m_pChatBox = utils_get_peripheral_wrap("chatBox") --chatBox
+	GlobalVars.m_pMiner = utils_get_peripheral_wrap("digitalMiner") --digitalMiner
 
-    if GlobalVars.m_pMiner then
-        GlobalVars.m_pMiner.start()
-    end
+    --if GlobalVars.m_pMiner then
+      --  GlobalVars.m_pMiner.start()
+    --end
 end
 
-function destroy_blocks_fn(GlobalVars)
+function utils_destroy_blocks(GlobalVars)
 	if GlobalVars.m_bHasChatBox then
 		turtle.digUp()
 	end
@@ -160,7 +158,7 @@ function destroy_blocks_fn(GlobalVars)
 	turtle.down()
 end
 
-function percentage_in_range_fn(percentage, percentage_target, tolerance)
+function utils_percentage_in_range(percentage, percentage_target, tolerance)
     local lower_bound = percentage_target - tolerance
     local upper_bound = percentage_target + tolerance
 
