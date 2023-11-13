@@ -1,6 +1,6 @@
 -- Computercraft script: 
 
--- Mekanism Digital Miner Automator version 2.0 for Minecraft 1.20.1 
+-- Mekanism Digital Miner Automator version 2.1 for Minecraft 1.20.1 
 -- (or maybe even anything above 1.12.2 with slight edits to the Blocks section) 
 -- by MartiNJ409 - https://github.com/martinjanas
 -- This script can be found in my repository - https://github.com/martinjanas/DigitalMinerAutomatization
@@ -25,7 +25,7 @@ Blocks.BLOCK_CHUNKLOADER = "chickenchunks:chunk_loader" -- Edit this to match yo
 Blocks.BLOCK_CHATBOX = "advancedperipherals:chat_box" -- Edit this only if you are porting to newer/older versions.
 -- User Settings Area --
 
--- Dont touch this underneath:
+-- Dont touch this if you don't know what you are doing:
 GlobalVars = {}
 GlobalVars.m_pMiner = nil
 GlobalVars.m_pChatBox = nil
@@ -125,6 +125,7 @@ end
 for i = 1, Settings.MAX_CHUNKS do
    GlobalVars.m_bIsChunkyTurtle = false
    GlobalVars.m_bHasChunkLoader = false
+   GlobalVars.m_bHasChatBox = false
     
    main(i)
 end
