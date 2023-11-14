@@ -54,78 +54,70 @@ end
 
 function utils_select_item(item_name)
 	for i = 1, 16 do
-		local item_info = turtle.getItemDetail(i)
-		
-		if item_info ~= nil then
-	
-			if item_info.name == item_name then
-				turtle.select(i)
-				
-				return true
-			end
+		local item_details = turtle.getItemDetail(i)
+
+		if item_details then
+		   if item_details.name == item_name then
+			  turtle.select(i)
+
+			  return true
+		   end
 		end
 	end
-
 	return false
 end
 
 function utils_place_blocks(Blocks, GlobalVars)
-	utils_select_item(Blocks.BLOCK_MINER)
-	
-	turtle.placeUp()
-	turtle.turnRight()
-	turtle.forward()
-	turtle.forward()
-	turtle.turnLeft()
-	
-	utils_select_item(Blocks.BLOCK_ENERGY)
-	
-	turtle.placeUp()
-	turtle.forward()
-	turtle.forward()
-	turtle.turnLeft()
-	turtle.forward()
-	turtle.forward()
-	turtle.up()
-	
-	utils_select_item(Blocks.BLOCK_STORAGE)
-	
-	turtle.placeUp()
-	turtle.forward()
-	
-	if not GlobalVars.m_bIsChunkyTurtle and utils_select_item(Blocks.BLOCK_CHUNKLOADER) then
-		GlobalVars.m_bHasChunkLoader = true
-		
-		utils_select_item(Blocks.BLOCK_CHUNKLOADER)
+	if utils_select_item(Blocks.BLOCK_MINER) then
+		os.sleep(0.5)
 		
 		turtle.placeUp()
-	end
-	
-	turtle.forward()
-	turtle.turnLeft()
-	turtle.forward()
-	turtle.forward()
-	
-	if GlobalVars.m_bIsChunkyTurtle then
-	   turtle.turnLeft()
-    end
-
-	if utils_select_item(Blocks.BLOCK_CHATBOX) then
-		GlobalVars.m_bHasChatBox = true
-	
-		utils_select_item(Blocks.BLOCK_CHATBOX)
+		turtle.turnRight()
+		turtle.forward()
+		turtle.forward()
+		turtle.turnLeft()
 		
-		turtle.placeUp()
+		if utils_select_item(Blocks.BLOCK_ENERGY) then
+		   turtle.placeUp()
+		   turtle.forward()
+		   turtle.forward()
+		   turtle.turnLeft()
+		   turtle.forward()
+		   turtle.forward()
+		   turtle.up()
+
+			if utils_select_item(Blocks.BLOCK_STORAGE) then
+				turtle.placeUp()
+				turtle.forward()
+
+				if not GlobalVars.m_bIsChunkyTurtle and utils_select_item(Blocks.BLOCK_CHUNKLOADER) then
+					GlobalVars.m_bHasChunkLoader = true
+					
+					turtle.placeUp()
+
+					turtle.forward()
+					turtle.turnLeft()
+					turtle.forward()
+					turtle.forward()
+				end
+
+				if GlobalVars.m_bIsChunkyTurtle then
+					turtle.turnLeft()
+				end
+				
+				if utils_select_item(Blocks.BLOCK_CHATBOX) then
+					GlobalVars.m_bHasChatBox = true
+				
+					turtle.placeUp()
+				end
+				
+				os.sleep(0.3)
+				
+				GlobalVars.m_pChatBox = utils_get_peripheral_wrap("chatBox") --chatBox
+				GlobalVars.m_pMiner = utils_get_peripheral_wrap("digitalMiner") --digitalMiner
+		 	end
+		end
 	end
-	
-    os.sleep(0.3)
-
-	GlobalVars.m_pChatBox = utils_get_peripheral_wrap("chatBox") --chatBox
-	GlobalVars.m_pMiner = utils_get_peripheral_wrap("digitalMiner") --digitalMiner
-
-    --if GlobalVars.m_pMiner then
-      --  GlobalVars.m_pMiner.start()
-    --end
 end
 
 function utils_destroy_blocks(GlobalVars)
