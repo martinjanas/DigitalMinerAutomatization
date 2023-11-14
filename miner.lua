@@ -33,26 +33,9 @@ GlobalVars.m_bHasChunkLoader = false
 GlobalVars.m_bIsChunkyTurtle = false
 GlobalVars.m_bHasChatBox = false
 
-function download_file(url, destination)
-   local response = http.get(url)
-
-   if response then
-      local file = fs.open(destination, "w")
-
-      local data = response.readAll()
-
-      file.write(data)
-      file.close()
-
-      response.close()
-   end
-end
-
-download_file("https://raw.githubusercontent.com/martinjanas/DigitalMinerAutomatization/main/utils.lua", "utils.lua")
-
-require "utils"
-
 function main(i)
+   require "utils"
+
    GlobalVars.m_bIsChunkyTurtle = utils_is_chunky_turtle()
 
    utils_place_blocks(Blocks, GlobalVars)
@@ -122,7 +105,24 @@ function main(i)
    end
 end
 
+function setup()
+   if fs.exists("utils.lua") then
+      fs.delete("utils.lua")
+      sleep(1)
+   end
+
+   shell.run("wget https://raw.githubusercontent.com/martinjanas/DigitalMinerAutomatization/main/utils.lua")
+end
+
+done = false
+
 for i = 1, Settings.MAX_CHUNKS do
+   if not done then
+      setup()
+
+      done = true
+   end
+
    GlobalVars.m_bIsChunkyTurtle = false
    GlobalVars.m_bHasChunkLoader = false
    GlobalVars.m_bHasChatBox = false
