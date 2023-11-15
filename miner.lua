@@ -49,9 +49,8 @@ function main(i)
 
       while GlobalVars.m_pMiner.isRunning() do
          local to_mine = GlobalVars.m_pMiner.getToMine()
-
          local seconds = (to_mine * 0.5)
-            
+
          if GlobalVars.m_pChatBox and Settings.SEND_TO_CHAT then
             local percentage = (to_mine / to_mine_cached) * 100
             percentage = math.floor(percentage)
@@ -119,7 +118,6 @@ done = false
 for i = 1, Settings.MAX_CHUNKS do
    if not done then
       setup()
-
       done = true
    end
 
